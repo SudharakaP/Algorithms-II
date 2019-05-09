@@ -15,16 +15,20 @@ public class SAP {
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
+        if (G == null)
+            throw new IllegalArgumentException();
         this.digraph = G;
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
+        int numVertices = digraph.V();
+        if (v >= numVertices || w >= numVertices)
+            throw new IllegalArgumentException();
         BreadthFirstDirectedPaths pathV = new BreadthFirstDirectedPaths(digraph, v);
         BreadthFirstDirectedPaths pathW = new BreadthFirstDirectedPaths(digraph, w);
-        int vertex = digraph.V();
         int minLength = Integer.MAX_VALUE;
-        for (int i = 0; i < vertex; i++) {
+        for (int i = 0; i < numVertices; i++) {
             if (pathV.hasPathTo(i) && pathW.hasPathTo(i)) {
                 int cur = pathV.distTo(i) + pathW.distTo(i);
                 if (cur < minLength) {
@@ -41,12 +45,14 @@ public class SAP {
 
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     public int ancestor(int v, int w) {
+        int numVertices = digraph.V();
+        if (v >= numVertices || w >= numVertices)
+            throw new IllegalArgumentException();
         BreadthFirstDirectedPaths pathV = new BreadthFirstDirectedPaths(digraph, v);
         BreadthFirstDirectedPaths pathW = new BreadthFirstDirectedPaths(digraph, w);
-        int vertex = digraph.V();
         int minLength = Integer.MAX_VALUE;
         int result = -1;
-        for (int i = 0; i < vertex; i++) {
+        for (int i = 0; i < numVertices; i++) {
             if (pathV.hasPathTo(i) && pathW.hasPathTo(i)) {
                 int cur = pathV.distTo(i) + pathW.distTo(i);
                 if (cur < minLength) {
@@ -61,11 +67,13 @@ public class SAP {
 
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
     public int length(Iterable<Integer> v, Iterable<Integer> w) {
+        if (v == null || w == null)
+            throw new IllegalArgumentException();
         BreadthFirstDirectedPaths pathV = new BreadthFirstDirectedPaths(digraph, v);
         BreadthFirstDirectedPaths pathW = new BreadthFirstDirectedPaths(digraph, w);
-        int vertex = digraph.V();
+        int numVertices = digraph.V();
         int minLength = Integer.MAX_VALUE;
-        for (int i = 0; i < vertex; i++) {
+        for (int i = 0; i < numVertices; i++) {
             if (pathV.hasPathTo(i) && pathW.hasPathTo(i)) {
                 int cur = pathV.distTo(i) + pathW.distTo(i);
                 if (cur < minLength) {
@@ -82,12 +90,14 @@ public class SAP {
 
     // a common ancestor that participates in shortest ancestral path; -1 if no such path
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
+        if (v == null || w == null)
+            throw new IllegalArgumentException();
         BreadthFirstDirectedPaths BFDPathsFromV = new BreadthFirstDirectedPaths(digraph, v);
         BreadthFirstDirectedPaths BFDPathsFromW = new BreadthFirstDirectedPaths(digraph, w);
-        int numberOfVertices = digraph.V();
+        int numVertices = digraph.V();
         int minLength = Integer.MAX_VALUE;
         int result = -1;
-        for (int i = 0; i < numberOfVertices; i++) {
+        for (int i = 0; i < numVertices; i++) {
             if (BFDPathsFromV.hasPathTo(i) && BFDPathsFromW.hasPathTo(i)) {
                 int cur = BFDPathsFromV.distTo(i) + BFDPathsFromW.distTo(i);
                 if (cur < minLength) {
