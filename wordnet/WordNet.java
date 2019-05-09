@@ -67,7 +67,7 @@ public class WordNet {
 
         // distance between nounA and nounB
         public int distance(String nounA, String nounB) {
-            if (nounA == null || nounB == null || !isNoun(nounA) || isNoun(nounB))
+            if (nounA == null || nounB == null || !isNoun(nounA) || !isNoun(nounB))
                 throw new IllegalArgumentException();
             int nounVertexIndexA = Integer.parseInt(nounA.split(",")[0]);
             int nounVertexIndexB = Integer.parseInt(nounB.split(",")[0]);
@@ -77,7 +77,7 @@ public class WordNet {
         // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
         // in a shortest ancestral path
         public String sap(String nounA, String nounB) {
-            if (nounA == null || nounB == null || !isNoun(nounA) || isNoun(nounB))
+            if (nounA == null || nounB == null || !isNoun(nounA) || !isNoun(nounB))
                 throw new IllegalArgumentException();
             int nounVertexIndexA = Integer.parseInt(nounA.split(",")[0]);
             int nounVertexIndexB = Integer.parseInt(nounB.split(",")[0]);
