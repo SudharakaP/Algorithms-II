@@ -61,6 +61,10 @@ public class WordNet {
         DirectedCycle directedCycle = new DirectedCycle(digraph);
         if (directedCycle.hasCycle())
             throw new IllegalArgumentException();
+        for (int i = 0; i < digraph.V(); i++){
+            if (digraph.outdegree(i) == 0)
+                throw new IllegalArgumentException();
+        }
     }
 
     // returns all WordNet nouns
