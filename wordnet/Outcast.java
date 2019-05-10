@@ -14,13 +14,6 @@ public class Outcast {
         this.wordNet = wordnet;
     }
 
-    private int distance(String noun, String[] nounSet) {
-        int distance = 0;
-        for (String nounSetElement: nounSet)
-            distance += wordNet.distance(noun, nounSetElement);
-        return distance;
-    }
-
     public String outcast(String[] nouns) {
         int maxDistance = 0;
         String maxDistanceNoun = null;
@@ -41,5 +34,12 @@ public class Outcast {
             String[] nouns = in.readAllStrings();
             StdOut.println(args[t] + ": " + outcast.outcast(nouns));
         }
+    }
+
+    private int distance(String noun, String[] nounSet) {
+        int distance = 0;
+        for (String nounSetElement: nounSet)
+            distance += wordNet.distance(noun, nounSetElement);
+        return distance;
     }
 }
