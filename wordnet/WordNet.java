@@ -9,13 +9,14 @@ import edu.princeton.cs.algs4.In;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class WordNet {
     private Digraph digraph;
     private List<Synset> synsetsList;
-    private Map<String, Integer> nounsMap;
+    private Map<String, List<Integer>> nounsMap;
     private Map<Integer, String> nounsByInteger;
     SAP sap;
 
@@ -25,31 +26,36 @@ public class WordNet {
         In synsetsInput = new In(synsets);
         In hypernymsInput = new In(hypernyms);
         synsetsList = new ArrayList<>();
+        nounsMap = new HashMap<>();
+        nounsByInteger = new HashMap<>();
 
         while(synsetsInput.hasNextLine()) {
             String synset = synsetsInput.readLine();
             String[] synsetArray = synset.split(",");
             String[] nouns = synsetArray[1].split(" ");
-            Synset synsetObject = new Synset(Integer.parseInt(synsetArray[0]), Arrays.asList(nouns), synsetArray[2]);
+            Synset synsetObject = new Synset(Arrays.asList(nouns));
             synsetsList.add(synsetObject);
 
-            for (String noun: nouns) {
-                nounsMap.put(noun, Integer.parseInt(synsetArray[0]));
-                nounsByInteger.put(Integer.parseInt(synsetArray[0]), noun);
+            for (String noun: nouns){
+                List<Integer> nounsList = nounsMap.get(noun);
+                if (nounsList == null)
+                    nounsMap.put(noun, new ArrayList<>());
+                nounsMap.get(noun).add(Integer.valueOf(synsetArray[0]));
             }
+
+            nounsByInteger.put(Integer.valueOf(synsetArray[0]), synsetArray[1]);
         }
         this.digraph = new Digraph(synsetsList.size());
 
         while(hypernymsInput.hasNextLine()){
             String hypernym = hypernymsInput.readLine();
             String[] hypernymArray = hypernym.split(",");
-            Integer index = Integer.parseInt(hypernymArray[0]);
-            List<Synset> hypernymsForSynset = new ArrayList<>();
+            Integer index = Integer.valueOf(hypernymArray[0]);
             for (int i = 1; i < hypernymArray.length; i++){
-                hypernymsForSynset.add(synsetsList.get(Integer.parseInt(hypernymArray[i])));
-                digraph.addEdge(i, index);
+                digraph.addEdge(index, Integer.parseInt(hypernymArray[i]));
+                synsetsList.get(index).addHypernym(synsetsList.get(Integer.parseInt(hypernymArray[i])));
             }
-            synsetsList.get(index).hypernyms = hypernymsForSynset;
+
         }
         this.sap = new SAP(digraph);
     }
@@ -82,16 +88,11 @@ public class WordNet {
     }
 
     private class Synset {
-        int id;
         List<String> nouns;
-        String gloss;
         List<Synset> hypernyms;
 
-        public Synset (int id, List<String> nouns, String gloss) {
-            this.id = id;
+        public Synset (List<String> nouns) {
             this.nouns = nouns;
-            this.gloss = gloss;
-            this.nouns = new ArrayList<>();
             this.hypernyms = new ArrayList<>();
         }
 

@@ -84,8 +84,7 @@ public class SAP {
 
         if (minLength == Integer.MAX_VALUE)
             return -1;
-        else
-            return minLength;
+        return minLength;
     }
 
     // a common ancestor that participates in shortest ancestral path; -1 if no such path
