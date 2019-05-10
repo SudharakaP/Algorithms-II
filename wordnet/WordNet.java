@@ -9,7 +9,6 @@ import edu.princeton.cs.algs4.DirectedCycle;
 import edu.princeton.cs.algs4.In;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,16 +23,15 @@ public class WordNet {
             throw new IllegalArgumentException();
         In synsetsInput = new In(synsets);
         In hypernymsInput = new In(hypernyms);
-        List<Synset> synsetsList = new ArrayList<>();
         nounsMap = new HashMap<>();
         nounsByInteger = new HashMap<>();
 
+        int synsetCount = 0;
         while (synsetsInput.hasNextLine()) {
             String synset = synsetsInput.readLine();
             String[] synsetArray = synset.split(",");
             String[] nouns = synsetArray[1].split(" ");
-            Synset synsetObject = new Synset(Arrays.asList(nouns));
-            synsetsList.add(synsetObject);
+            synsetCount++;
 
             for (String noun : nouns) {
                 List<Integer> nounsList = nounsMap.get(noun);
@@ -44,17 +42,14 @@ public class WordNet {
 
             nounsByInteger.put(Integer.valueOf(synsetArray[0]), synsetArray[1]);
         }
-        Digraph digraph = new Digraph(synsetsList.size());
+        Digraph digraph = new Digraph(synsetCount);
 
         while (hypernymsInput.hasNextLine()) {
             String hypernym = hypernymsInput.readLine();
             String[] hypernymArray = hypernym.split(",");
             Integer index = Integer.valueOf(hypernymArray[0]);
-            for (int i = 1; i < hypernymArray.length; i++) {
+            for (int i = 1; i < hypernymArray.length; i++)
                 digraph.addEdge(index, Integer.parseInt(hypernymArray[i]));
-
-                synsetsList.get(index)
-                           .addHypernym(synsetsList.get(Integer.parseInt(hypernymArray[i])));     }
 
         }
         this.sap = new SAP(digraph);
@@ -62,7 +57,7 @@ public class WordNet {
         if (directedCycle.hasCycle())
             throw new IllegalArgumentException();
         int count = 0;
-        for (int i = 0; i < digraph.V(); i++){
+        for (int i = 0; i < digraph.V(); i++) {
             if (digraph.outdegree(i) == 0)
                 count++;
         }
@@ -95,20 +90,6 @@ public class WordNet {
         if (nounA == null || nounB == null || !isNoun(nounA) || !isNoun(nounB))
             throw new IllegalArgumentException();
         return nounsByInteger.get(sap.ancestor(nounsMap.get(nounA), nounsMap.get(nounB)));
-    }
-
-    private class Synset {
-        List<String> nouns;
-        List<Synset> hypernyms;
-
-        public Synset(List<String> nouns) {
-            this.nouns = nouns;
-            this.hypernyms = new ArrayList<>();
-        }
-
-        public void addHypernym(Synset synset) {
-            hypernyms.add(synset);
-        }
     }
 
     public static void main(String[] args) {

@@ -17,7 +17,7 @@ public class SAP {
     public SAP(Digraph G) {
         if (G == null)
             throw new IllegalArgumentException();
-        this.digraph = G;
+        this.digraph = new Digraph(G);
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path
