@@ -47,7 +47,7 @@ public class WordNet {
         while (hypernymsInput.hasNextLine()) {
             String hypernym = hypernymsInput.readLine();
             String[] hypernymArray = hypernym.split(",");
-            Integer index = Integer.valueOf(hypernymArray[0]);
+            int index = Integer.parseInt(hypernymArray[0]);
             for (int i = 1; i < hypernymArray.length; i++)
                 digraph.addEdge(index, Integer.parseInt(hypernymArray[i]));
 
