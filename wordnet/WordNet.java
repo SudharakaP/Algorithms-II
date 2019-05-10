@@ -52,9 +52,9 @@ public class WordNet {
             Integer index = Integer.valueOf(hypernymArray[0]);
             for (int i = 1; i < hypernymArray.length; i++) {
                 digraph.addEdge(index, Integer.parseInt(hypernymArray[i]));
+
                 synsetsList.get(index)
-                           .addHypernym(synsetsList.get(Integer.parseInt(hypernymArray[i])));
-            }
+                           .addHypernym(synsetsList.get(Integer.parseInt(hypernymArray[i])));     }
 
         }
         this.sap = new SAP(digraph);
@@ -62,7 +62,7 @@ public class WordNet {
         if (directedCycle.hasCycle())
             throw new IllegalArgumentException();
         for (int i = 0; i < digraph.V(); i++){
-            if (digraph.outdegree(i) == 0)
+            if (digraph.outdegree(i) != 0)
                 throw new IllegalArgumentException();
         }
     }
@@ -105,14 +105,6 @@ public class WordNet {
 
         public void addHypernym(Synset synset) {
             hypernyms.add(synset);
-        }
-
-        public List<Synset> getHypernyms() {
-            return hypernyms;
-        }
-
-        public List<String> getNouns() {
-            return nouns;
         }
     }
 
