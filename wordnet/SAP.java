@@ -6,7 +6,6 @@
 
 import edu.princeton.cs.algs4.BreadthFirstDirectedPaths;
 import edu.princeton.cs.algs4.Digraph;
-import edu.princeton.cs.algs4.DirectedCycle;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
@@ -17,9 +16,6 @@ public class SAP {
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
         if (G == null)
-            throw new IllegalArgumentException();
-        DirectedCycle directedCycle = new DirectedCycle(G);
-        if (directedCycle.hasCycle())
             throw new IllegalArgumentException();
         this.digraph = G;
     }
